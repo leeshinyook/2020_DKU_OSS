@@ -9,6 +9,16 @@ pipeline {
                     ls -lah
                 '''
             }
+        },
+        stage('Test') {
+          steps {
+            echo 'Testing!'
+          }
+        },
+        stage('Deploy') {
+          steps {
+            echo 'Deploying'
+          }
         }
     }
 }
