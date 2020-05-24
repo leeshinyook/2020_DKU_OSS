@@ -21,7 +21,17 @@
     <script type="text/javascript">
       $('.search').on('click', evt => {
         let bookName = $('.book_name').val();
-        
+        let url = '/searchBook/' + bookName;
+        $.ajax({
+          url,
+          type: 'GET',
+          success: (res) => {
+            console.log(res);
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        })
       })
     </script>  
   </body>
