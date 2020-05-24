@@ -4,10 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
     <title>도서관리 시스템</title>
   </head>
   <body>
     <h1>도서관리 시스템</h1>
     <p>도서를 조회, 등록, 대여 등을 할 수 있는 시스템입니다.</p>
+    <p>
+      <h2>도서검색하기</h2>
+      <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search">검색하기</button>
+    </p>
+    <script type="text/javascript">
+      $('.search').on('click', evt => {
+        let bookName = $('.book_name').val();
+        
+      })
+    </script>  
   </body>
 </html>
