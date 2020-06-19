@@ -1,13 +1,19 @@
 from flask import Flask, render_template, request, jsonify
-from flask_mysqldb import MySQL
-
+import pymysql
+db = pymysql.connect(host='localhost',
+                     port=3306,
+                     user='root',
+                     passwd='test',
+                     db='book',
+                     charset='utf8')
+cursor = db.cursor()
 app = Flask(__name__)
 
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'test'
-app.config['MYSQL_DATABASE_DB'] = 'library'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-mysql = MySQL(app)
+# app.config['MYSQL_DATABASE_USER'] = 'root'
+# app.config['MYSQL_DATABASE_PASSWORD'] = 'test'
+# app.config['MYSQL_DATABASE_DB'] = 'library'
+# app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+# mysql = MySQL(app)
 
 @app.route('/')
 def index():
@@ -18,7 +24,6 @@ def searchBook(book):
   print(book)
   return jsonify({"book" : book})
 
-# 
 @app.route('/rentBook', methods = ['PUT'])
 def rentBook():
   book = request.get_json()
@@ -28,9 +33,11 @@ def rentBook():
 def returnBook():
   return
 
-
 @app.route('/searchAllBook')
 def searchAllBook():
+  sql = """select * from book"""
+  cursor.execute(sql)
+  print(cursor.fetchall())
   return 
 
 if __name__ == "__main__":
