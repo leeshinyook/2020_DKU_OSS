@@ -1,6 +1,13 @@
 from flask import Flask, render_template, request, jsonify
+from flask_mysqldb import MySQL
+
 app = Flask(__name__)
 
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'test'
+app.config['MYSQL_DATABASE_DB'] = 'library'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql = MySQL(app)
 
 @app.route('/')
 def index():
