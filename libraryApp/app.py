@@ -11,16 +11,18 @@ db = pymysql.connect(host='localhost',
                      charset='utf8')
 cursor = db.cursor()
 
-
-
 @app.route('/')
 def index():
   return render_template('index.html')
 
 @app.route('/searchBook/<book>')
 def searchBook(book):
-  print(book)
-  return jsonify({"book" : book})
+  sql = """select * from book where title = %s"""
+  cursor.execute(sql, book);
+  result = cursor.fetchone()
+  if(result is None):
+    return jsonify({"result": "fail"})
+  return jsonify({"book" : result})
 
 @app.route('/rentBook', methods = ['PUT'])
 def rentBook():
@@ -35,8 +37,8 @@ def returnBook():
 def searchAllBook():
   sql = """select * from book"""
   cursor.execute(sql)
-  # print(cursor.fetchall())
-  return jsonify(cursor.fetchall())
+  result = cursor.fetchall()
+  return jsonify({"books" : result})
 
 if __name__ == "__main__":
     print('Listening on 8080')
