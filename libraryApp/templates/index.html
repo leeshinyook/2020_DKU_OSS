@@ -15,36 +15,82 @@
     <h1>도서관리 시스템</h1>
     <p>도서를 조회, 등록, 추가, 삭제를 할 수 있는 시스템입니다.</p>
     <p>
-      <h2>도서검색하기</h2>
-      <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search" type="button">검색하기</button>
-      <ol id="book_list">
-
-      </ol>
+      <h2>도서 검색</h2>
+      <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search" type="button" onclick="SearchBook()">검색하기</button>
+      <p class="search_book_info"></p>
+      <h2>도서 추가</h2>
+      <input class="add_book_name" type="text" placeholder="도서명을 입력해주세요"><button class="search" type="button" onclick="AddBook()">추가하기</button>
+      <h2>도서 목록</h2>
+      <div class="list">
+      <ol id="book_list"></ol>
+      </div>
     </p>
     <script type="text/javascript">
-    function DeleteBook(idx) {
-        console.log(idx);
-        $('#'+ idx).parent().remove();
-        let url = '/deleteBook';
-        $.ajax({
-          url,
-          type: 'POST',
-          contentType:"application/json; charset=UTF-8",
-          data: JSON.stringify({ "book" : idx}),
-          success: (res) => {
-            console.log(res);
-          },
-          error: (err) => {
-            console.log(err);
-          }
-        })
-      }
     $(document).ready(() => {
+      fetchBook();
+    })
+    function AddBook() {
+      let bookName = $('.add_book_name').val();
+      let url = '/addBook';
+      $.ajax({
+        url,
+        type: 'POST',
+        contentType:"application/json; charset=UTF-8",
+        data: JSON.stringify({ "book" : bookName}),
+        success: (res) => {
+          if(res.result === 'success')
+            fetchBook();
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    function DeleteBook(idx) {
+      $('#'+ idx).parent().remove();
+      let url = '/deleteBook';
+      $.ajax({
+        url,
+        type: 'POST',
+        contentType:"application/json; charset=UTF-8",
+        data: JSON.stringify({ "book" : idx}),
+        success: (res) => {
+          console.log(res);
+          fetchBook(); 
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    function SearchBook() {
+      let bookName = $('.book_name').val();
+      let url = '/searchBook/' + bookName;
+      $('.search_book_info').children().remove();
+      $.ajax({
+        url,
+        type: 'GET',
+        success: (res) => {
+          if(res.result !== 'fail') {
+            let bookIdx = res.book[0];
+            let bookTitle = res.book[1];
+            $('.search_book_info').append(`<div>${bookTitle}&nbsp;<button class="delete" type="button" id=${bookIdx} onclick="DeleteBook(${bookIdx})">삭제</button></div>`);           
+          } else {
+            $('.search_book_info').append(`<div>${bookName}의 검색결과가 없습니다.</div>`)
+          }
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      })
+    }
+    function fetchBook() {
       let url = '/searchAllBook';
       $.ajax({
         url,
         type: 'GET',
         success: (res) => {
+          init();
           for(let e in res) {
             let bookIdx = res[e][0];
             let bookTitle = res[e][1];
@@ -55,21 +101,12 @@
           console.log(err);
         }
       })
-    })
-    $('.search').on('click', evt => {
-      let bookName = $('.book_name').val();
-      let url = '/searchBook/' + bookName;
-      $.ajax({
-        url,
-        type: 'GET',
-        success: (res) => {
-          console.log(res);
-        },
-        error: (err) => {
-          console.log(err)
-        }
-      })
-    })
+    }
+    function init() {
+      $('#book_list').children().remove();
+      $('.add_book_name').val('');
+      $('.book_name').val('');
+    }
     </script>  
   </body>
 </html>

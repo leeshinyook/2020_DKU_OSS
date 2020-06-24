@@ -25,7 +25,7 @@ def searchBook(book):
   return jsonify({"book" : result})
 
 @app.route('/addBook', methods = ['POST'])
-def rentBook():
+def addBook():
   data = request.get_json().get('book')
   try:
     sql = """insert into book(title) values(%s)"""  
@@ -36,7 +36,7 @@ def rentBook():
     return jsonify({'result' : 'fail'})
 
 @app.route('/deleteBook', methods = ['POST'])
-def returnBook():
+def deleteBook():
   data = request.get_json().get('book')
   try:
     sql = """delete from book where id=%s"""  
