@@ -3,12 +3,11 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-db = pymysql.connect(host='localhost',
+db = pymysql.connect(host='db',
                     port=3306,
                      user='root',
                      passwd='test',
-                     db='library',
-                     charset='utf8')
+                     db='library')
 cursor = db.cursor()
 
 @app.route('/')
@@ -55,4 +54,4 @@ def searchAllBook():
 
 if __name__ == "__main__":
     print('Listening on 8080')
-    app.run(host="127.0.0.1", port="8080")
+    app.run(host="0.0.0.0", port="8080")
