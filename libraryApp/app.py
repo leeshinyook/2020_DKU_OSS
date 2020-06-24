@@ -24,14 +24,29 @@ def searchBook(book):
     return jsonify({"result": "fail"})
   return jsonify({"book" : result})
 
-@app.route('/rentBook', methods = ['PUT'])
+@app.route('/addBook', methods = ['POST'])
 def rentBook():
-  book = request.get_json()
-  return
+  data = request.get_json().get('book')
+  print(data)
+  try:
+    sql = """insert into book(title) values(%s)"""  
+    cursor.execute(sql, data)
+    db.commit()
+    return jsonify({'result' : 'success'})
+  except:
+    return jsonify({'result' : 'fail'})
 
-@app.route('/returnBook', methods = ['PUT'])
+@app.route('/deleteBook', methods = ['POST'])
 def returnBook():
-  return
+  data = request.get_json().get('book')
+  print(data)
+  try:
+    sql = """delete from book where title=%s"""  
+    cursor.execute(sql, data)
+    db.commit()
+    return jsonify({'result' : 'success'})
+  except:
+    return jsonify({'result' : 'fail'})
 
 @app.route('/searchAllBook')
 def searchAllBook():

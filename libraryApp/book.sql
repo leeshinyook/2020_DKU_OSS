@@ -1,1 +1,1 @@
-create table `book` ( `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(10) NOT NULL, `rental` boolean not null default 0 );
+create table `book` ( `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(100) NOT NULL );
