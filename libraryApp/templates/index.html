@@ -16,27 +16,46 @@
     <p>도서를 조회, 등록, 추가, 삭제를 할 수 있는 시스템입니다.</p>
     <p>
       <h2>도서검색하기</h2>
-      <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search">검색하기</button>
+      <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search" type="button">검색하기</button>
       <ol id="book_list">
 
       </ol>
     </p>
     <script type="text/javascript">
+    function DeleteBook(idx) {
+        console.log(idx);
+        $('#'+ idx).parent().remove();
+        let url = '/deleteBook';
+        $.ajax({
+          url,
+          type: 'POST',
+          contentType:"application/json; charset=UTF-8",
+          data: JSON.stringify({ "book" : idx}),
+          success: (res) => {
+            console.log(res);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
     $(document).ready(() => {
       let url = '/searchAllBook';
       $.ajax({
         url,
         type: 'GET',
         success: (res) => {
-          for(let el in res) {
-            $("#book_list").append(`<li>${res[el][1]}&nbsp;<button>삭제</button></li>`);  
+          for(let e in res) {
+            let bookIdx = res[e][0];
+            let bookTitle = res[e][1];
+            $("#book_list").append(`<li>${bookTitle}&nbsp;<button class="delete" type="button" id=${bookIdx} onclick="DeleteBook(${bookIdx})">삭제</button></li>`);  
           }
         },
         error: (err) => {
           console.log(err);
         }
       })
-    })    
+    })
     $('.search').on('click', evt => {
       let bookName = $('.book_name').val();
       let url = '/searchBook/' + bookName;

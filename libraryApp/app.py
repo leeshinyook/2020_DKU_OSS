@@ -39,7 +39,7 @@ def rentBook():
 def returnBook():
   data = request.get_json().get('book')
   try:
-    sql = """delete from book where title=%s"""  
+    sql = """delete from book where id=%s"""  
     cursor.execute(sql, data)
     db.commit()
     return jsonify({'result' : 'success'})
