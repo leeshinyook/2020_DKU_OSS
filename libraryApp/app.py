@@ -27,7 +27,6 @@ def searchBook(book):
 @app.route('/addBook', methods = ['POST'])
 def rentBook():
   data = request.get_json().get('book')
-  print(data)
   try:
     sql = """insert into book(title) values(%s)"""  
     cursor.execute(sql, data)
@@ -39,7 +38,6 @@ def rentBook():
 @app.route('/deleteBook', methods = ['POST'])
 def returnBook():
   data = request.get_json().get('book')
-  print(data)
   try:
     sql = """delete from book where title=%s"""  
     cursor.execute(sql, data)
@@ -53,7 +51,7 @@ def searchAllBook():
   sql = """select * from book"""
   cursor.execute(sql)
   result = cursor.fetchall()
-  return jsonify({"books" : result})
+  return jsonify(result)
 
 if __name__ == "__main__":
     print('Listening on 8080')

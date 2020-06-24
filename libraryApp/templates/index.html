@@ -13,26 +13,44 @@
   </head>
   <body>
     <h1>도서관리 시스템</h1>
-    <p>도서를 조회, 등록, 대여 등을 할 수 있는 시스템입니다.</p>
+    <p>도서를 조회, 등록, 추가, 삭제를 할 수 있는 시스템입니다.</p>
     <p>
       <h2>도서검색하기</h2>
       <input class="book_name" type="text" placeholder="도서명을 검색해주세요"><button class="search">검색하기</button>
+      <ol id="book_list">
+
+      </ol>
     </p>
     <script type="text/javascript">
-      $('.search').on('click', evt => {
-        let bookName = $('.book_name').val();
-        let url = '/searchBook/' + bookName;
-        $.ajax({
-          url,
-          type: 'GET',
-          success: (res) => {
-            console.log(res);
-          },
-          error: (err) => {
-            console.log(err)
+    $(document).ready(() => {
+      let url = '/searchAllBook';
+      $.ajax({
+        url,
+        type: 'GET',
+        success: (res) => {
+          for(let el in res) {
+            $("#book_list").append(`<li>${res[el][1]}&nbsp;<button>삭제</button></li>`);  
           }
-        })
+        },
+        error: (err) => {
+          console.log(err);
+        }
       })
+    })    
+    $('.search').on('click', evt => {
+      let bookName = $('.book_name').val();
+      let url = '/searchBook/' + bookName;
+      $.ajax({
+        url,
+        type: 'GET',
+        success: (res) => {
+          console.log(res);
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      })
+    })
     </script>  
   </body>
 </html>
